@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class AppDAOImpl implements AppDAO{
+public class AppDAOImpl implements AppDAO {
 
     private EntityManager entityManager;
 
@@ -60,12 +60,28 @@ public class AppDAOImpl implements AppDAO{
     @Override
     public List<Course> findCoursesByInstructorId(int theId) {
         TypedQuery<Course> query = entityManager.createQuery(
-                             "from Course where instructor.id = :data", Course.class);
+                "from Course where instructor.id = :data", Course.class);
         query.setParameter("data", theId);
 
         List<Course> courses = query.getResultList();
 
         return courses;
+    }
+
+    @Override
+    public Instructor findInstructorByIdJoinFetch(int theId) {
+
+        TypedQuery<Instructor> query = entityManager.createQuery(
+                "select i from Instructor i "
+                        + "JOIN FETCH i.courses "
+                        + "JOIN FETCH i.instructorDetail "
+                        + "where i.id = :data", Instructor.class);
+
+        query.setParameter("data", theId);
+
+        Instructor instructor = query.getSingleResult();
+
+        return instructor;
     }
 }
 
