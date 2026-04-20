@@ -1,6 +1,7 @@
 package com.yusufjon.cruddemo;
 
 import com.yusufjon.cruddemo.dao.AppDAO;
+import com.yusufjon.cruddemo.entity.Course;
 import com.yusufjon.cruddemo.entity.Instructor;
 import com.yusufjon.cruddemo.entity.InstructorDetail;
 import org.springframework.boot.CommandLineRunner;
@@ -27,8 +28,34 @@ public class CruddemoApplication {
 
 //			findInstructorDetail(appDAO);
 
-			deleteInstructorDetail(appDAO);
+//			deleteInstructorDetail(appDAO);
+
+			createInstructorWithCourses(appDAO);
 		};
+	}
+
+	private void createInstructorWithCourses(AppDAO appDAO) {
+
+		Instructor tempInstructor =
+				new Instructor("Diyor", "Mavlonberdiyev", "mavlonov@23.com");
+
+		InstructorDetail tempInstructorDetail =
+				new InstructorDetail("http://www.youtube.com", "Pubg Mobile!!!");
+
+		tempInstructor.setInstructorDetail(tempInstructorDetail);
+
+		Course tempCourse1 = new Course("Air Guitar - The Ultimate Guide");
+		Course tempCourse2 = new Course("The Pinball Masterclass");
+
+		tempInstructor.add(tempCourse1);
+		tempInstructor.add(tempCourse2);
+
+
+		System.out.println("Saving the Instructor : " + tempInstructor);
+		System.out.println("The Course: " + tempInstructor.getCourses());
+		appDAO.save(tempInstructor);
+
+		System.out.println("Done!");
 	}
 
 	private void deleteInstructorDetail(AppDAO appDAO) {
